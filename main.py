@@ -1,16 +1,18 @@
-# This is a sample Python script.
+import parser
+import sys
+from models import *
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+players = parser.parse_instance(sys.argv[1])[:15]
 
+squad = Squad()
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+squad.first_team = players[:11]
+squad.substitutes = players[11:15]
 
+for player in squad.first_team + squad.substitutes:
+    print(player.name, player.position, player.club)
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+print(squad.get_substitute_count_for_position("GK"))
+print(squad.get_starter_count_for_position("GK"))
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+print(squad.get_player_count_for_club("Arsenal"))
