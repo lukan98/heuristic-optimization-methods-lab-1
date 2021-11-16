@@ -5,7 +5,7 @@ from models import *
 
 players = parser.parse_instance(sys.argv[1])
 
-# players = sorted(players, key=lambda player: (player.points, -player.price), reverse=True)
+players = sorted(players, key=lambda player: (-player.price, player.points), reverse=True)
 
 squad = algorithms.run_greedy_algorithm(players)
 

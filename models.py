@@ -27,17 +27,17 @@ class Squad:
 
     def add_to_first_team(self, player: Player):
         self.first_team.append(player)
-        most_recently_added = player
+        self.player_stack.append(player)
         return
 
     def add_to_substitutes(self, player: Player):
         self.substitutes.append(player)
-        most_recently_added = player
+        self.player_stack.append(player)
         return
 
     def pop_player(self) -> Player:
         popped_player = self.player_stack.pop()
-        if self.substitutes.contains(popped_player):
+        if popped_player in self.substitutes:
             self.substitutes.remove(popped_player)
         else:
             self.first_team.remove(popped_player)
