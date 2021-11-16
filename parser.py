@@ -1,6 +1,7 @@
 import csv
 from models import Player
 
+
 def parse_instance(source_string: str) -> [Player]:
     instance = open(file=source_string, mode="r", encoding="cp1252")
     reader = csv.reader(instance)

@@ -1,3 +1,9 @@
+gk = "GK"
+df = "DEF"
+mf = "MID"
+fw = "FW"
+
+
 class Player:
     def __init__(self, identifier: int, position: str, name: str, club: str, points: float, price: float):
         self.identifier = identifier
@@ -11,35 +17,23 @@ class Player:
 class Squad:
     first_team: [Player] = []
     substitutes: [Player] = []
-    player_stack: [Player] = []
 
-    def get_player_count_for_position(self, position: str) -> int:
-        return self.get_substitute_count_for_position(position) + self.get_starter_count_for_position(position)
+    def no_of_players_in_position(self, position: str) -> int:
+        return self.no_of_subs_in_position(position) + self.no_of_starters_in_position(position)
 
-    def get_substitute_count_for_position(self, position: str) -> int:
+    def no_of_subs_in_position(self, position: str) -> int:
         return sum(1 for substitute in self.substitutes if substitute.position == position)
 
-    def get_starter_count_for_position(self, position: str) -> int:
+    def no_of_starters_in_position(self, position: str) -> int:
         return sum(1 for starter in self.first_team if starter.position == position)
 
-    def get_player_count_for_club(self, club: str) -> int:
+    def no_of_players_in_club(self, club: str) -> int:
         return sum(1 for player in self.first_team + self.substitutes if player.club == club)
 
     def add_to_first_team(self, player: Player):
         self.first_team.append(player)
-        self.player_stack.append(player)
         return
 
     def add_to_substitutes(self, player: Player):
         self.substitutes.append(player)
-        self.player_stack.append(player)
         return
-
-    def pop_player(self) -> Player:
-        popped_player = self.player_stack.pop()
-        if popped_player in self.substitutes:
-            self.substitutes.remove(popped_player)
-        else:
-            self.first_team.remove(popped_player)
-
-        return popped_player
