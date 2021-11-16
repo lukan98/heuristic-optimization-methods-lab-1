@@ -9,5 +9,5 @@ players = sorted(players, key=lambda player: (-player.price, player.points), rev
 
 squad = algorithms.run_greedy_algorithm(players)
 
-for player in squad.first_team:
-    print(player.position, player.club, player.name, player.price, player.points)
+for player in squad.first_team + squad.substitutes:
+    print(player.identifier, player.position, player.club, player.name, player.price, player.points)
