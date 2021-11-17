@@ -30,6 +30,16 @@ class Squad:
     def no_of_players_in_club(self, club: str) -> int:
         return sum(1 for player in self.first_team + self.substitutes if player.club == club)
 
+    def most_expensive_player(self) -> Player:
+        sorted_by_price = sorted(self.first_team + self.substitutes, key=lambda player: player.price, reverse=True)
+        return sorted_by_price[0]
+
+    def remove_from_team(self, player: Player):
+        if player in self.first_team:
+            self.first_team.remove(player)
+        elif player in self.substitutes:
+            self.substitutes.remove(player)
+
     def add_to_first_team(self, player: Player):
         self.first_team.append(player)
         return

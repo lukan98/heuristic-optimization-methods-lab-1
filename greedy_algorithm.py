@@ -38,6 +38,27 @@ def run(players: [Player]) -> Squad:
                and player.club not in clubs_filtered \
                and player.position not in squad_positions_filled
 
+    def find_cheaper_alternative_to_most_expensive() -> float:
+        # assuming the most expensive player is in the first team
+        most_expensive_player = squad.most_expensive_player()
+
+        if most_expensive_player.club in clubs_filtered:
+            clubs_filtered.remove(most_expensive_player.club)
+
+        replacement_player = list(filter(lambda player:
+                                         player.price < most_expensive_player.price
+                                         and player.position == most_expensive_player.position
+                                         and player not in squad.first_team + squad.substitutes,
+                                         players_by_points_descending))[0]
+
+        squad.remove_from_team(most_expensive_player)
+        squad.add_to_first_team(replacement_player)
+
+        if squad.no_of_players_in_club(replacement_player.club) == 3:
+            clubs_filtered.add(replacement_player.club)
+
+        return most_expensive_player.price - replacement_player.price
+
     players_by_points_descending = sorted(players, key=lambda player: (player.points, -player.price), reverse=True)
     players_by_price_ascending = sorted(players, key=lambda player: (-player.price, player.points), reverse=True)
 
@@ -97,12 +118,14 @@ def run(players: [Player]) -> Squad:
                     squad_positions_filled.add(fw)
             # no affordable players
             else:
-                return squad
+                # assuming the most expensive player is in the first team
+                savings = find_cheaper_alternative_to_most_expensive()
+                max_price += savings
 
         # we're filling the substitutes
         else:
             if len(squad.substitutes) < 4:
-                if 4 - len(squad.substitutes) == substitute_gks:
+                if 4 - len(squad.substitutes) == substitute_gks and squad.no_of_players_in_position(gk) < substitute_gks:
                     prioritized_positions.add(gk)
                 elif gk in prioritized_positions:
                     prioritized_positions.remove(gk)
@@ -136,7 +159,9 @@ def run(players: [Player]) -> Squad:
 
             # no affordable players
             else:
-                return squad
+                # assuming the most expensive player is in the first team
+                savings = find_cheaper_alternative_to_most_expensive()
+                max_price += savings
 
     print(iterations)
 
