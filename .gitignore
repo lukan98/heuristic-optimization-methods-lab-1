@@ -112,3 +112,5 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+greedy_solution.txt
+local_optimised.txt

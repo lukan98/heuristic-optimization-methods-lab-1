@@ -47,3 +47,7 @@ class Squad:
     def add_to_substitutes(self, player: Player):
         self.substitutes.append(player)
         return
+
+    def least_efficient_starter(self):
+        sorted_by_efficiency = sorted(self.first_team, key=lambda player: player.points/player.price)
+        return sorted_by_efficiency[0]
