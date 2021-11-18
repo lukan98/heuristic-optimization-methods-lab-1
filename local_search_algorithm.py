@@ -1,5 +1,4 @@
 from models import *
-from copy import deepcopy
 
 
 def optimise(squad: Squad, budget: float, players: [Player]) -> bool:

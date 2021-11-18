@@ -9,6 +9,7 @@ squad = greedy_algorithm.run(players)
 
 for player in squad.first_team + squad.substitutes:
     print(player.identifier, player.position, player.club, player.name, player.price, player.points)
+print("Points: ", sum(map(lambda x: x.points, squad.first_team)), ", price: ", sum(map(lambda x: x.price, squad.first_team + squad.substitutes)))
 
 file = open("greedy_solution.txt", "w")
 first_team = list(map(lambda x: str(x.identifier), squad.first_team))
