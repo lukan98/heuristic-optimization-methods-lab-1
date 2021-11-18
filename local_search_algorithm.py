@@ -89,7 +89,6 @@ def optimise(squad: Squad, budget: float, players: [Player]) -> bool:
                     clubs_filtered.add(potential_replacement.club)
 
                 squad.add_to_first_team(potential_replacement)
-                # breakpoint()
                 return True
 
         # revert changes
