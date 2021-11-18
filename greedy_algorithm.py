@@ -163,6 +163,6 @@ def run(players: [Player]) -> Squad:
                 savings = find_cheaper_alternative_to_most_expensive()
                 max_price += savings
 
-    print(iterations)
+    print("No of iterations: ", iterations)
 
     return squad
