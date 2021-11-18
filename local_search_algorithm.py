@@ -46,50 +46,52 @@ def optimise(squad: Squad, budget: float, players: [Player]) -> bool:
         else:
             return player_to_replace
 
-    least_efficient_starter = squad.least_efficient_starter()
-    replacement = find_more_efficient_alternative(least_efficient_starter)
+    for starter in squad.starters_by_lowest_efficiency():
+        spent = sum(map(lambda player: player.price, squad.first_team + squad.substitutes))
+        replacement = find_more_efficient_alternative(starter)
 
-    if replacement == least_efficient_starter:
-        return False
-
-    squad.remove_from_team(least_efficient_starter)
-
-    spent -= least_efficient_starter.price
-
-    if least_efficient_starter.club in clubs_filtered:
-        clubs_filtered.remove(least_efficient_starter.club)
-
-    if squad.no_of_players_in_club(replacement.club) == 2:
-        clubs_filtered.add(replacement.club)
-
-    squad.add_to_first_team(replacement)
-    spent += replacement.price
-    point_loss = least_efficient_starter.points - replacement.points
-
-    # replacement SOMEHOW has more points than the original player
-    if point_loss < 0:
-        squad.remove_from_team(replacement)
-        squad.add_to_first_team(least_efficient_starter)
-        return False
-
-    for player in squad.first_team:
-        potential_replacement = find_better_alternative(player)
-
-        if potential_replacement == player:
+        if replacement == starter:
             continue
 
-        if potential_replacement.points - player.points > point_loss:
-            squad.remove_from_team(player)
+        squad.remove_from_team(starter)
 
-            if player.club in clubs_filtered:
-                clubs_filtered.remove(player.club)
+        spent -= starter.price
 
-            if squad.no_of_players_in_club(potential_replacement.club) == 2:
-                clubs_filtered.add(potential_replacement.club)
+        if starter.club in clubs_filtered:
+            clubs_filtered.remove(starter.club)
 
-            squad.add_to_first_team(potential_replacement)
-            return True
+        if squad.no_of_players_in_club(replacement.club) == 2:
+            clubs_filtered.add(replacement.club)
 
-    # revert changes
-    squad.remove_from_team(replacement)
-    squad.add_to_first_team(least_efficient_starter)
+        squad.add_to_first_team(replacement)
+        spent += replacement.price
+        point_loss = starter.points - replacement.points
+
+        # replacement SOMEHOW has more points than the original player revert and continue with the loop
+        if point_loss < 0:
+            squad.remove_from_team(replacement)
+            squad.add_to_first_team(starter)
+            continue
+
+        for player in squad.first_team:
+            potential_replacement = find_better_alternative(player)
+
+            if potential_replacement == player:
+                continue
+
+            if potential_replacement.points - player.points > point_loss:
+                squad.remove_from_team(player)
+
+                if player.club in clubs_filtered:
+                    clubs_filtered.remove(player.club)
+
+                if squad.no_of_players_in_club(potential_replacement.club) == 2:
+                    clubs_filtered.add(potential_replacement.club)
+
+                squad.add_to_first_team(potential_replacement)
+                # breakpoint()
+                return True
+
+        # revert changes
+        squad.remove_from_team(replacement)
+        squad.add_to_first_team(starter)
