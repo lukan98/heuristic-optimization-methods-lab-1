@@ -47,6 +47,12 @@ def optimise(squad: Squad, budget: float, players: [Player]) -> bool:
             return player_to_replace
 
     for starter in squad.starters_by_lowest_efficiency():
+        # DIFFERENCE COMPARED TO THE CODE POSTED ON MOODLE
+        for club in list(map(lambda x: x.club, squad.first_team + squad.substitutes)):
+            if list(map(lambda x: x.club, squad.first_team + squad.substitutes)).count(club) == 3:
+                clubs_filtered.add(club)
+        # DIFFERENCE COMAPRED TO THE CODE POSTED ON MOODLE
+
         spent = sum(map(lambda player: player.price, squad.first_team + squad.substitutes))
         replacement = find_more_efficient_alternative(starter)
 
