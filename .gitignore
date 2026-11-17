@@ -114,3 +114,9 @@ dmypy.json
 .pyre/
 greedy_solution.txt
 local_optimised.txt
+
+# OS files
+.DS_Store
+
+# IDE
+.idea/
